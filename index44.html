@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Login System</title>
+    <link rel="stylesheet" href="style44.css">
+</head>
+<body>
+    <div class="container">
+        <h1> Login Authentication System</h1>
+        <div class="form-toggle">
+            <button id="register-btn">Register</button>
+            <button id="login-btn">Login</button>
+        </div>
+        <div id="register-form" class="form-container">
+            <h2>Register</h2>
+            <input type="text" id="register-username" placeholder="Username">
+            <input type="password" id="register-password" placeholder="Password">
+            <button onclick="register()">Register</button>
+        </div>
+        <div id="login-form" class="form-container">
+            <h2>Login</h2>
+            <input type="text" id="login-username" placeholder="Username">
+            <input type="password" id="login-password" placeholder="Password">
+            <button onclick="login()">Login</button>
+        </div>
+        <div id="success-message" class="form-container" style="display: none;">
+            <h2>Login Successful!</h2>
+            <p>Welcome, <span id="username-display"></span>!</p>
+            <button onclick="logout()">Logout</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
+<script>
+   document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('register-btn').addEventListener('click', () => showForm('register-form'));
+    document.getElementById('login-btn').addEventListener('click', () => showForm('login-form'));
+});
+
+function showForm(formId) {
+    document.getElementById('register-form').classList.remove('active');
+    document.getElementById('login-form').classList.remove('active');
+    document.getElementById('success-message').classList.remove('active');
+
+    if (formId) {
+        document.getElementById(formId).classList.add('active');
+    }
+}
+
+function register() {
+    const username = document.getElementById('register-username').value;
+    const password = document.getElementById('register-password').value;
+
+    if (username && password) {
+        if (localStorage.getItem(username)) {
+            alert('User already exists!');
+        } else {
+            localStorage.setItem(username, password);
+            alert('User registered successfully!');
+            showForm('login-form');
+        }
+    } else {
+        alert('Please fill in both fields.');
+    }
+}
+
+function login() {
+    const username = document.getElementById('login-username').value;
+    const password = document.getElementById('login-password').value;
+
+    const storedPassword = localStorage.getItem(username);
+    if (storedPassword && storedPassword === password) {
+        document.getElementById('username-display').innerText = username;
+        document.getElementById('success-message').style.display = 'block';
+        showForm('success-message');
+    } else {
+        alert('Invalid username or password.');
+    }
+}
+
+function logout() {
+    document.getElementById('success-message').style.display = 'none';
+    showForm(null);
+    document.querySelector('.form-toggle').style.display = 'block';
+}
+
+</script>
